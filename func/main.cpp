@@ -7,21 +7,7 @@
 #include <vector>
 #define MAX_NUM_PER_ROW 5
 #define MAX_SQUARE 9
-// return a random number from 1-100
-int randomNumber(int min, int max) {
-  std::random_device rd;
-  std::mt19937 gen(rd());
-  std::uniform_int_distribution<> distr(min, max);
 
-  return (int)distr(gen);
-}
-int randomSpot() {
-  std::random_device rd;
-  std::mt19937 gen(rd());
-  std::uniform_int_distribution<> distr(0, 8);
-
-  return (int)distr(gen);
-}
 class Sheets {
 private:
   // Data hidden from the outside (Encapsulation)
@@ -31,9 +17,9 @@ public:
   std::string color;
 
   // 2. The Constructor (Runs automatically when object is created)
-  Sheets(std::string c, std::string n) { color = c; }
+  Sheets(std::string c) { color = c; }
   // 3. A Method
-  void create() {
+  std::array<std::array<int, 9>, 18> create() {
     std::vector<int> pool(90);
     std::iota(pool.begin(), pool.end(), 1);
 
@@ -74,27 +60,22 @@ public:
           }
         }
       }
-
-      // Safety: If for some reason a row couldn't get 5 numbers,
-      // you might want to restart the whole 'create' process.
-      if (counter < MAX_NUM_PER_ROW) {
-        create(); // Recursively try again
-        return;
-      }
     }
+    return sheet;
   }
+
   void show() {
     for (int i = 0; i < 18; i++) {
 
       if (i != 0 && i % 9 == 0) {
-        printf("Sheet 2\n"); // %4s means string padded to 4 spaces
+        std::cout << "Sheet 2\t\t\t\t" << color << "\n";
 
       } else if (i == 0) {
-        printf("Sheet 1\n"); // %4s means string padded to 4 spaces
+        std::cout << "Sheet 1\t\t\t\t" << color << "\n";
 
       } else if (i % 3 == 0) {
         for (int j = 0; j < 9; j++) {
-          printf("----"); // %4s means string padded to 4 spaces
+          printf("----");
         }
         printf("\n");
       }
@@ -119,9 +100,10 @@ public:
   Players(std::string n) { name = n; }
   std::vector<std::array<std::array<int, 9>, 9>> sheetList;
 };
+
 int main() {
   Players player1("Khang");
-  Sheets sheet("blue");
+  Sheets sheet("Yellow");
   sheet.create();
   sheet.show();
   return 0;
